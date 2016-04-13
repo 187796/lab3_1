@@ -43,11 +43,7 @@ public class BookKeeperTest {
 		requestItem = mock(RequestItem.class);
 		clientData = mock(ClientData.class);
 		productData = mock(ProductData.class);
-	}
-
-	@Test
-	public void requestForOneElementInvoiceShouldReturnOneElementInvoice() {
-		requestItemList.add(requestItem);
+		
 		when(invoiceRequest.getItems()).thenReturn(requestItemList);
 		when(requestItem.getTotalCost()).thenReturn(money);
 		when(productData.getType()).thenReturn(ProductType.STANDARD);
@@ -57,6 +53,12 @@ public class BookKeeperTest {
 		when(requestItem.getQuantity()).thenReturn(1);
 
 		when(invoiceRequest.getClientData()).thenReturn(clientData);
+	}
+
+	@Test
+	public void requestForOneElementInvoiceShouldReturnOneElementInvoice() {
+		requestItemList.add(requestItem);
+		
 
 		Invoice invoice = bookKeeper.issuance(invoiceRequest, taxPolicy);
 		assertThat(invoice.getItems().size(), is(1));
@@ -66,20 +68,21 @@ public class BookKeeperTest {
 	public void requestForTwoElementInvoiceShouldCallCalculateTaxMethodTwoTimes() {
 		requestItemList.add(requestItem);
 		requestItemList.add(requestItem);
-		when(invoiceRequest.getItems()).thenReturn(requestItemList);
-
-		when(requestItem.getTotalCost()).thenReturn(money);
-
-		when(productData.getType()).thenReturn(ProductType.STANDARD);
-		when(taxPolicy.calculateTax(productData.getType(), money)).thenReturn(tax);
-
-		when(requestItem.getProductData()).thenReturn(productData);
-		when(requestItem.getQuantity()).thenReturn(1);
-
-		when(invoiceRequest.getClientData()).thenReturn(clientData);
 
 		Invoice invoice = bookKeeper.issuance(invoiceRequest, taxPolicy);
 		verify(taxPolicy, times(2)).calculateTax(productData.getType(), money);
+	}
+	
+	@Test
+	public void requestForZeroElementInvoiceShouldReturnZeroElementInvoice(){
+		Invoice invoice = bookKeeper.issuance(invoiceRequest, taxPolicy);
+		assertThat(invoice.getItems().size(),is(0));
+	}
+	
+	@Test
+	public void requestForZeroElementInvoiceShouldCallCalculateTaxMethodZeroTimes(){
+		Invoice invoice = bookKeeper.issuance(invoiceRequest, taxPolicy);
+		verify(taxPolicy,times(0)).calculateTax(productData.getType(), money);
 	}
 
 }
