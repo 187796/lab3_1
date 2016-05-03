@@ -43,6 +43,26 @@ public class AddProductCommandHandler implements CommandHandler<AddProductComman
 	private ClientRepository clientRepository;
 	
 
+	public void setReservationRepository(ReservationRepository reservationRepository) {
+		this.reservationRepository = reservationRepository;
+	}
+
+	public void setProductRepository(ProductRepository productRepository) {
+		this.productRepository = productRepository;
+	}
+
+	public void setSuggestionService(SuggestionService suggestionService) {
+		this.suggestionService = suggestionService;
+	}
+
+	public void setClientRepository(ClientRepository clientRepository) {
+		this.clientRepository = clientRepository;
+	}
+
+	public void setSystemContext(SystemContext systemContext) {
+		this.systemContext = systemContext;
+	}
+
 	private SystemContext systemContext;
 	
 	@Override
