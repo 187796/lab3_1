@@ -71,7 +71,11 @@ public class AddProductCommandHandlerTest {
 	
 	@Test
 	public void saveProductIdAvailable(){
-		AddProductCommand addProductCommand = new AddProductCommand(reservationId, productId, 1);
+		AddProductCommand addProductCommand = new AddProductCommandBuilder()
+				.withReservationId(reservationId)
+				.withProductId(productId)
+				.withQuantity(1)
+				.build();
 		addProductCommandHandler.handle(addProductCommand);
 		verify(reservationRepository, times(1)).load(reservationId);
 		verify(reservationRepository, times(1)).save(any(Reservation.class));
@@ -80,7 +84,11 @@ public class AddProductCommandHandlerTest {
 	
 	@Test
 	public void saveProductIdNotAvailable(){
-		AddProductCommand addProductCommand = new AddProductCommand(reservationId, productNotAvailableId, 1);
+		AddProductCommand addProductCommand = new AddProductCommandBuilder()
+				.withReservationId(reservationId)
+				.withProductId(productNotAvailableId)
+				.withQuantity(1)
+				.build();
 		addProductCommandHandler.handle(addProductCommand);
 		verify(reservationRepository, times(1)).load(reservationId);
 		verify(productRepository, times(1)).load(productNotAvailableId);
