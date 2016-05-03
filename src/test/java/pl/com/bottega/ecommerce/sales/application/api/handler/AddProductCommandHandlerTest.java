@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.ClientData;
 import pl.com.bottega.ecommerce.canonicalmodel.publishedlanguage.Id;
+import pl.com.bottega.ecommerce.sales.application.api.command.AddProductCommand;
 import pl.com.bottega.ecommerce.sales.domain.client.Client;
 import pl.com.bottega.ecommerce.sales.domain.client.ClientRepository;
 import pl.com.bottega.ecommerce.sales.domain.equivalent.SuggestionService;
@@ -65,5 +66,14 @@ public class AddProductCommandHandlerTest {
 		addProductCommandHandler.setSuggestionService(suggestionService);
 		addProductCommandHandler.setSystemContext(systemContext);
 
+	}
+
+	@Test
+	public void saveProductIdAvailable() {
+		AddProductCommand addProductCommand = new AddProductCommand(reservationId, productId, 1);
+		addProductCommandHandler.handle(addProductCommand);
+		verify(reservationRepository, times(1)).load(reservationId);
+		verify(reservationRepository, times(1)).save(any(Reservation.class));
+		verify(productRepository, times(1)).load(productId);
 	}
 }
